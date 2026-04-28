@@ -392,6 +392,7 @@
             color: #94a3b8;
         }
     </style>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <header class="app-header">
@@ -1065,4 +1066,11 @@
         })();
     </script>
 </body>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch(err => console.log('Error SW:', err));
+  }
+</script>
 </html>
