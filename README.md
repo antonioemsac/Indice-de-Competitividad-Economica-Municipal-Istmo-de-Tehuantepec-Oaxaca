@@ -1,0 +1,1 @@
+El Índice de Competitividad Económica Municipal (ICCEM) es un indicador diseñado para medir, comparar y clasificar la capacidad de los municipios para generar, atraer y sostener actividad económica de calidad para la atracción de inversiones en la región del Istmo de Tehuantepec. [Derechos reservados-Dr. Antonio Salazar Campos - UNISTMO - Ixtepec]
