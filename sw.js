@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iccem-v3';
+const CACHE_NAME = 'iccem-v4';
 const urlsToCache = [
   './',
   './index.html',
