@@ -445,7 +445,7 @@
                 </div>
                 <div style="text-align:center;margin-top:0.5rem;"><span id="deltaUE"></span></div>
                 <div class="section-title">Desglose sectorial 2025</div>
-                <div id="sectorBreakdown" style="font-size:0.78rem;max-height:200px;overflow-y:auto;padding-right:40px;"></div>
+                <div id="sectorBreakdown" style="font-size:0.78rem;max-height:200px;overflow-y:auto;padding-right:28px;"></div>
             </div>
         </div>
 
@@ -865,7 +865,7 @@
                 sectorDiv.innerHTML = '';
                 ue.s2025.forEach((val, i) => {
                     if (val > 0) sectorDiv.innerHTML +=
-                        `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #1e293b;"><span>${sectorNames[i]}</span><span style="font-weight:600;">${val}</span></div>`;
+                        `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #1e293b;"><span>${sectorNames[i]}</span><span style="font-weight:600;margin-right:36px;">${val}</span></div>`;
                 });
                 const tbodyEsc = document.getElementById('tbodyEscenarios');
                 tbodyEsc.innerHTML = '';
