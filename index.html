@@ -1,9 +1,10 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCEM · Competividad municipal</title>
+    <title>ICCEM · Competitividad municipal</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
     </script>
     <style>
@@ -102,6 +103,45 @@
             border-color: var(--accent);
             font-weight: 600;
         }
+
+        .language-switcher {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            margin-top: -0.6rem;
+            padding-top: 0.35rem;
+            color: #64748b;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .language-switcher .sep {
+            color: #64748b;
+            opacity: 0.8;
+            user-select: none;
+        }
+        .lang-btn {
+            border: 0;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0.28rem 0.55rem;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            font-family: inherit;
+        }
+        .lang-btn:hover {
+            color: var(--text);
+            background: rgba(148,163,184,.12);
+        }
+        .lang-btn.active {
+            color: #facc15;
+            background: rgba(250,204,21,.10);
+            border: 1px solid rgba(250,204,21,.22);
+        }
         .main-container {
             display: grid;
             grid-template-columns: 1fr 360px;
@@ -111,7 +151,46 @@
             margin: 0 auto;
         }
         @media (max-width: 1200px) {
-            .main-container {
+    
+        .language-switcher {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            margin-top: -0.6rem;
+            padding-top: 0.35rem;
+            color: #64748b;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .language-switcher .sep {
+            color: #64748b;
+            opacity: 0.8;
+            user-select: none;
+        }
+        .lang-btn {
+            border: 0;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0.28rem 0.55rem;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            font-family: inherit;
+        }
+        .lang-btn:hover {
+            color: var(--text);
+            background: rgba(148,163,184,.12);
+        }
+        .lang-btn.active {
+            color: #facc15;
+            background: rgba(250,204,21,.10);
+            border: 1px solid rgba(250,204,21,.22);
+        }
+        .main-container {
                 grid-template-columns: 1fr;
             }
         }
@@ -414,6 +493,16 @@
             <button id="btnRanking">🏆 Ranking</button>
             <button id="btnSensibilidad">📈 Sensibilidad</button>
         </div>
+        <nav class="language-switcher" id="languageSwitcher" aria-label="Selector de idioma">
+            <button type="button" class="lang-btn active" data-lang="es">ES</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="za">DIIDXAZÁ</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="en">EN</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="zh">中文</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="fr">FR</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="de">DE</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="ja">日本語</button><span class="sep">|</span>
+            <button type="button" class="lang-btn" data-lang="da">DA</button>
+        </nav>
     </header>
 
     <div class="main-container" id="mainContainer">
@@ -445,7 +534,7 @@
                 </div>
                 <div style="text-align:center;margin-top:0.5rem;"><span id="deltaUE"></span></div>
                 <div class="section-title">Desglose sectorial 2025</div>
-                <div id="sectorBreakdown" style="font-size:0.78rem;max-height:200px;overflow-y:auto;padding-right:28px;"></div>
+                <div id="sectorBreakdown" style="font-size:0.78rem;max-height:200px;overflow-y:auto;"></div>
             </div>
         </div>
 
@@ -698,19 +787,67 @@
                 "Unión Hidalgo": { u2020: 1096, u2025: 1367, s2025: [0, 0, 3, 0, 325, 19, 22, 10, 502, 2, 1, 5, 3, 13, 14, 0, 7, 27, 36, 7, 240, 126, 5] }
             };
 
-            const sectorNames = [
-                "Agricultura", "Minería", "Energía", "Construcción", "Mfg Alim/Beb",
-                "Mfg Madera/Papel", "Mfg Metal/Maq", "Comercio Mayorista", "Comercio Minorista",
-                "Transporte", "Transp. Turístico", "Información", "Serv. Financieros",
-                "Serv. Inmobiliarios", "Serv. Profesionales", "Corporativos", "Serv. Apoyo",
-                "Educación", "Salud", "Esparcimiento", "Alojamiento", "Otros Servicios", "Gobierno"
-            ];
+            const LANGS = {
+                es: { locale: 'es-MX', label: 'ES' },
+                za: { locale: 'es-MX', label: 'DIIDXAZÁ' },
+                en: { locale: 'en-US', label: 'EN' },
+                zh: { locale: 'zh-CN', label: '中文' },
+                fr: { locale: 'fr-FR', label: 'FR' },
+                de: { locale: 'de-DE', label: 'DE' },
+                ja: { locale: 'ja-JP', label: '日本語' },
+                da: { locale: 'da-DK', label: 'DA' }
+            };
+            let currentLang = localStorage.getItem('iccemLang') || 'es';
+
+            const i18n = {
+                es: { pageTitle:'ICCEM · Competitividad municipal', headerTitle:'ICCEM–CIIT · Comparador de municipios', subtitle:'Índice de Competitividad Económica Municipal · Istmo de Tehuantepec, Oaxaca', municipioA:'Municipio A:', municipioB:'vs B:', dashboard:'📋 Dashboard', comparar:'🔍 Comparar A vs B', ranking:'🏆 Ranking', sensibilidad:'📈 Sensibilidad', resumen:'Resumen', dimTitle:'Dimensiones del ICCEM (pesos ACP)', ueTitle:'Unidades Económicas', sectorBreakdown:'Desglose sectorial 2025', escTitle:'Escenarios de Ponderación', compTitle:'Comparación A vs B', rankingTitle:'Ranking Regional', sensTitle:'Análisis de Sensibilidad', kpiICCEM:'ICCEM v3', kpiRank:'Ranking', kpiCat:'Categoría', kpiGrowth:'Crecimiento %', kpiUE:'UE 2025', kpiStability:'Estabilidad', scenario:'Escenario', rank:'Rank', municipality:'Municipio', cat:'Cat', growth:'Crec%', range:'Rango', stability:'Estabilidad', dimension:'Dimensión', diff:'Dif.', selectTwo:'Selecciona dos municipios diferentes para comparar.', base:'ACP Base (v3)', equal:'Pesos Iguales', sof:'Énf. Sofisticación', man:'Énf. Manufactura', dyn:'Énf. Dinamismo', div:'Énf. Diversificación', high:'Alto', mediumHigh:'Medio-Alto', mediumLow:'Medio-Bajo', low:'Bajo', veryStable:'Muy estable', stable:'Estable', moderate:'Moderado', sensitive:'Sensible', footer:'ICCEM–CIIT v3 · Datos DENUE-INEGI 2020–2025 · Pesos ACP (OCDE/JRC Handbook, 2008) · Istmo de Tehuantepec, Oaxaca' },
+                za: { pageTitle:'ICCEM · Guidxi guenda gule za guidxi', headerTitle:'ICCEM–CIIT · Gudxiguie guidxi', subtitle:'Guenda ra guenda gule stinu guidxi · Guidxiguie’ Tehuantepec, Oaxaca', municipioA:'Guidxi A:', municipioB:'ne B:', dashboard:'📋 Gui’chi’', comparar:'🔍 Gudxiguie A ne B', ranking:'🏆 Ndaani’', sensibilidad:'📈 Guenda nadxiee', resumen:'Xquidxe’', dimTitle:'Guenda dxiña ICCEM (pesos ACP)', ueTitle:'Benda dxiña guenda gule', sectorBreakdown:'Guiiba’ sector 2025', escTitle:'Niza ponderación', compTitle:'Gudxiguie A ne B', rankingTitle:'Ndaani’ region', sensTitle:'Guenda nadxiee', kpiICCEM:'ICCEM v3', kpiRank:'Ndaani’', kpiCat:'Categoría', kpiGrowth:'Guca %', kpiUE:'UE 2025', kpiStability:'Guenda dxiee', scenario:'Niza', rank:'Rank', municipality:'Guidxi', cat:'Cat', growth:'Guca%', range:'Rango', stability:'Guenda dxiee', dimension:'Dimensión', diff:'Dif.', selectTwo:'Bidxii chupa guidxi qué gaca iguales para gudxiguie.', base:'ACP base (v3)', equal:'Pesos iguales', sof:'Énf. sofisticación', man:'Énf. manufactura', dyn:'Énf. dinamismo', div:'Énf. diversificación', high:'Napa guenda', mediumHigh:'Galán napa', mediumLow:'Galán beu', low:'Ná bidaani’', veryStable:'Napa dxiee', stable:'Dxiee', moderate:'Moderado', sensitive:'Sensible', footer:'ICCEM–CIIT v3 · Datos DENUE-INEGI 2020–2025 · Pesos ACP (OCDE/JRC Handbook, 2008) · Guidxiguie’ Tehuantepec, Oaxaca' },
+                en: { pageTitle:'ICCEM · Municipal competitiveness', headerTitle:'ICCEM–CIIT · Municipality comparator', subtitle:'Municipal Economic Competitiveness Index · Isthmus of Tehuantepec, Oaxaca', municipioA:'Municipality A:', municipioB:'vs B:', dashboard:'📋 Dashboard', comparar:'🔍 Compare A vs B', ranking:'🏆 Ranking', sensibilidad:'📈 Sensitivity', resumen:'Summary', dimTitle:'ICCEM dimensions (PCA weights)', ueTitle:'Economic Units', sectorBreakdown:'2025 sector breakdown', escTitle:'Weighting scenarios', compTitle:'A vs B comparison', rankingTitle:'Regional ranking', sensTitle:'Sensitivity analysis', kpiICCEM:'ICCEM v3', kpiRank:'Ranking', kpiCat:'Category', kpiGrowth:'Growth %', kpiUE:'EU 2025', kpiStability:'Stability', scenario:'Scenario', rank:'Rank', municipality:'Municipality', cat:'Cat', growth:'Growth%', range:'Range', stability:'Stability', dimension:'Dimension', diff:'Diff.', selectTwo:'Select two different municipalities to compare.', base:'PCA Base (v3)', equal:'Equal weights', sof:'Sophistication focus', man:'Manufacturing focus', dyn:'Dynamism focus', div:'Diversification focus', high:'High', mediumHigh:'Medium-High', mediumLow:'Medium-Low', low:'Low', veryStable:'Very stable', stable:'Stable', moderate:'Moderate', sensitive:'Sensitive', footer:'ICCEM–CIIT v3 · DENUE-INEGI data 2020–2025 · PCA weights (OECD/JRC Handbook, 2008) · Isthmus of Tehuantepec, Oaxaca' },
+                zh: { pageTitle:'ICCEM · 市政竞争力', headerTitle:'ICCEM–CIIT · 市政比较器', subtitle:'市政经济竞争力指数 · 特万特佩克地峡，瓦哈卡', municipioA:'市政 A：', municipioB:'对比 B：', dashboard:'📋 仪表板', comparar:'🔍 比较 A 与 B', ranking:'🏆 排名', sensibilidad:'📈 敏感性', resumen:'摘要', dimTitle:'ICCEM 维度（PCA 权重）', ueTitle:'经济单位', sectorBreakdown:'2025 年部门细分', escTitle:'加权情景', compTitle:'A 与 B 比较', rankingTitle:'区域排名', sensTitle:'敏感性分析', kpiICCEM:'ICCEM v3', kpiRank:'排名', kpiCat:'类别', kpiGrowth:'增长 %', kpiUE:'2025 经济单位', kpiStability:'稳定性', scenario:'情景', rank:'排名', municipality:'市政', cat:'类', growth:'增长%', range:'范围', stability:'稳定性', dimension:'维度', diff:'差异', selectTwo:'请选择两个不同的市政进行比较。', base:'PCA 基准 (v3)', equal:'等权重', sof:'重视复杂度', man:'重视制造业', dyn:'重视活力', div:'重视多元化', high:'高', mediumHigh:'中高', mediumLow:'中低', low:'低', veryStable:'非常稳定', stable:'稳定', moderate:'中等', sensitive:'敏感', footer:'ICCEM–CIIT v3 · DENUE-INEGI 2020–2025 数据 · PCA 权重（OECD/JRC Handbook, 2008）· 特万特佩克地峡，瓦哈卡' },
+                fr: { pageTitle:'ICCEM · Compétitivité municipale', headerTitle:'ICCEM–CIIT · Comparateur de municipalités', subtitle:'Indice de compétitivité économique municipale · Isthme de Tehuantepec, Oaxaca', municipioA:'Municipalité A :', municipioB:'vs B :', dashboard:'📋 Tableau de bord', comparar:'🔍 Comparer A vs B', ranking:'🏆 Classement', sensibilidad:'📈 Sensibilité', resumen:'Résumé', dimTitle:'Dimensions de l’ICCEM (poids ACP)', ueTitle:'Unités économiques', sectorBreakdown:'Ventilation sectorielle 2025', escTitle:'Scénarios de pondération', compTitle:'Comparaison A vs B', rankingTitle:'Classement régional', sensTitle:'Analyse de sensibilité', kpiICCEM:'ICCEM v3', kpiRank:'Classement', kpiCat:'Catégorie', kpiGrowth:'Croissance %', kpiUE:'UE 2025', kpiStability:'Stabilité', scenario:'Scénario', rank:'Rang', municipality:'Municipalité', cat:'Cat.', growth:'Croiss.%', range:'Plage', stability:'Stabilité', dimension:'Dimension', diff:'Diff.', selectTwo:'Sélectionnez deux municipalités différentes à comparer.', base:'ACP base (v3)', equal:'Poids égaux', sof:'Accent sophistication', man:'Accent fabrication', dyn:'Accent dynamisme', div:'Accent diversification', high:'Élevé', mediumHigh:'Moyen-élevé', mediumLow:'Moyen-faible', low:'Faible', veryStable:'Très stable', stable:'Stable', moderate:'Modéré', sensitive:'Sensible', footer:'ICCEM–CIIT v3 · Données DENUE-INEGI 2020–2025 · Poids ACP (OECD/JRC Handbook, 2008) · Isthme de Tehuantepec, Oaxaca' },
+                de: { pageTitle:'ICCEM · Kommunale Wettbewerbsfähigkeit', headerTitle:'ICCEM–CIIT · Gemeinden-Vergleich', subtitle:'Index der kommunalen wirtschaftlichen Wettbewerbsfähigkeit · Isthmus von Tehuantepec, Oaxaca', municipioA:'Gemeinde A:', municipioB:'vs B:', dashboard:'📋 Dashboard', comparar:'🔍 A vs B vergleichen', ranking:'🏆 Rangliste', sensibilidad:'📈 Sensitivität', resumen:'Zusammenfassung', dimTitle:'ICCEM-Dimensionen (PCA-Gewichte)', ueTitle:'Wirtschaftseinheiten', sectorBreakdown:'Sektorale Aufschlüsselung 2025', escTitle:'Gewichtungsszenarien', compTitle:'Vergleich A vs B', rankingTitle:'Regionale Rangliste', sensTitle:'Sensitivitätsanalyse', kpiICCEM:'ICCEM v3', kpiRank:'Rangliste', kpiCat:'Kategorie', kpiGrowth:'Wachstum %', kpiUE:'WE 2025', kpiStability:'Stabilität', scenario:'Szenario', rank:'Rang', municipality:'Gemeinde', cat:'Kat.', growth:'Wachst.%', range:'Spanne', stability:'Stabilität', dimension:'Dimension', diff:'Diff.', selectTwo:'Wählen Sie zwei unterschiedliche Gemeinden zum Vergleich aus.', base:'PCA-Basis (v3)', equal:'Gleiche Gewichte', sof:'Fokus Verfeinerung', man:'Fokus Fertigung', dyn:'Fokus Dynamik', div:'Fokus Diversifizierung', high:'Hoch', mediumHigh:'Mittel-hoch', mediumLow:'Mittel-niedrig', low:'Niedrig', veryStable:'Sehr stabil', stable:'Stabil', moderate:'Moderat', sensitive:'Sensibel', footer:'ICCEM–CIIT v3 · DENUE-INEGI-Daten 2020–2025 · PCA-Gewichte (OECD/JRC Handbook, 2008) · Isthmus von Tehuantepec, Oaxaca' },
+                ja: { pageTitle:'ICCEM · 自治体競争力', headerTitle:'ICCEM–CIIT · 自治体比較ツール', subtitle:'自治体経済競争力指数 · テワンテペク地峡、オアハカ', municipioA:'自治体 A：', municipioB:'対 B：', dashboard:'📋 ダッシュボード', comparar:'🔍 A と B を比較', ranking:'🏆 ランキング', sensibilidad:'📈 感度', resumen:'概要', dimTitle:'ICCEM の次元（PCA 重み）', ueTitle:'経済単位', sectorBreakdown:'2025 年部門別内訳', escTitle:'重み付けシナリオ', compTitle:'A と B の比較', rankingTitle:'地域ランキング', sensTitle:'感度分析', kpiICCEM:'ICCEM v3', kpiRank:'ランキング', kpiCat:'カテゴリー', kpiGrowth:'成長率 %', kpiUE:'2025 経済単位', kpiStability:'安定性', scenario:'シナリオ', rank:'順位', municipality:'自治体', cat:'区分', growth:'成長%', range:'範囲', stability:'安定性', dimension:'次元', diff:'差', selectTwo:'比較するには異なる二つの自治体を選択してください。', base:'PCA 基準 (v3)', equal:'同一重み', sof:'高度化重視', man:'製造業重視', dyn:'ダイナミズム重視', div:'多様化重視', high:'高', mediumHigh:'中高', mediumLow:'中低', low:'低', veryStable:'非常に安定', stable:'安定', moderate:'中程度', sensitive:'敏感', footer:'ICCEM–CIIT v3 · DENUE-INEGI 2020–2025 データ · PCA 重み（OECD/JRC Handbook, 2008）· テワンテペク地峡、オアハカ' },
+                da: { pageTitle:'ICCEM · Kommunal konkurrenceevne', headerTitle:'ICCEM–CIIT · Kommunesammenligner', subtitle:'Kommunalt indeks for økonomisk konkurrenceevne · Tehuantepec-næsset, Oaxaca', municipioA:'Kommune A:', municipioB:'vs B:', dashboard:'📋 Dashboard', comparar:'🔍 Sammenlign A vs B', ranking:'🏆 Rangering', sensibilidad:'📈 Følsomhed', resumen:'Resumé', dimTitle:'ICCEM-dimensioner (PCA-vægte)', ueTitle:'Økonomiske enheder', sectorBreakdown:'Sektorfordeling 2025', escTitle:'Vægtningsscenarier', compTitle:'Sammenligning A vs B', rankingTitle:'Regional rangering', sensTitle:'Følsomhedsanalyse', kpiICCEM:'ICCEM v3', kpiRank:'Rangering', kpiCat:'Kategori', kpiGrowth:'Vækst %', kpiUE:'ØE 2025', kpiStability:'Stabilitet', scenario:'Scenarie', rank:'Rang', municipality:'Kommune', cat:'Kat.', growth:'Vækst%', range:'Spænd', stability:'Stabilitet', dimension:'Dimension', diff:'Forskel', selectTwo:'Vælg to forskellige kommuner til sammenligning.', base:'PCA-base (v3)', equal:'Lige vægte', sof:'Fokus på sofistikering', man:'Fokus på fremstilling', dyn:'Fokus på dynamik', div:'Fokus på diversificering', high:'Høj', mediumHigh:'Middel-høj', mediumLow:'Middel-lav', low:'Lav', veryStable:'Meget stabil', stable:'Stabil', moderate:'Moderat', sensitive:'Følsom', footer:'ICCEM–CIIT v3 · DENUE-INEGI-data 2020–2025 · PCA-vægte (OECD/JRC Handbook, 2008) · Tehuantepec-næsset, Oaxaca' }
+            };
+
+            const sectorNamesByLang = {
+                es: ["Agricultura","Minería","Energía","Construcción","Mfg Alim/Beb","Mfg Madera/Papel","Mfg Metal/Maq","Comercio Mayorista","Comercio Minorista","Transporte","Transp. Turístico","Información","Serv. Financieros","Serv. Inmobiliarios","Serv. Profesionales","Corporativos","Serv. Apoyo","Educación","Salud","Esparcimiento","Alojamiento","Otros Servicios","Gobierno"],
+                za: ["Guidxilayú","Minería","Energía","Construcción","Mfg alim/beb","Mfg yaga/gui'chi'","Mfg metal/maq","Guxidxi guendabi'chi'","Guxidxi minorista","Transporte","Transporte turista","Información","Servicio financiero","Servicio inmobiliario","Servicio profesional","Corporativo","Servicio apoyo","Educación","Salud","Esparcimiento","Alojamiento","Otros servicios","Gobierno"],
+                en: ["Agriculture","Mining","Energy","Construction","Food/Beverage Mfg","Wood/Paper Mfg","Metal/Machinery Mfg","Wholesale trade","Retail trade","Transport","Tourism transport","Information","Financial services","Real estate services","Professional services","Corporate offices","Support services","Education","Health","Recreation","Accommodation","Other services","Government"],
+                zh: ["农业","采矿","能源","建筑","食品/饮料制造","木材/纸张制造","金属/机械制造","批发贸易","零售贸易","运输","旅游运输","信息","金融服务","房地产服务","专业服务","公司总部","支持服务","教育","健康","娱乐","住宿","其他服务","政府"],
+                fr: ["Agriculture","Mines","Énergie","Construction","Fabrication alim./boissons","Fabrication bois/papier","Fabrication métal/machines","Commerce de gros","Commerce de détail","Transport","Transport touristique","Information","Services financiers","Services immobiliers","Services professionnels","Sièges sociaux","Services de soutien","Éducation","Santé","Loisirs","Hébergement","Autres services","Gouvernement"],
+                de: ["Landwirtschaft","Bergbau","Energie","Bau","Nahrungs-/Getränkeherstellung","Holz-/Papierherstellung","Metall-/Maschinenbau","Großhandel","Einzelhandel","Transport","Tourismustransport","Information","Finanzdienstleistungen","Immobiliendienste","Professionelle Dienste","Unternehmen","Unterstützungsdienste","Bildung","Gesundheit","Freizeit","Unterkunft","Sonstige Dienste","Regierung"],
+                ja: ["農業","鉱業","エネルギー","建設","食品・飲料製造","木材・紙製造","金属・機械製造","卸売","小売","輸送","観光輸送","情報","金融サービス","不動産サービス","専門サービス","企業本部","支援サービス","教育","健康","娯楽","宿泊","その他サービス","政府"],
+                da: ["Landbrug","Minedrift","Energi","Byggeri","Fødevare-/drikkevareproduktion","Træ-/papirproduktion","Metal-/maskinproduktion","Engroshandel","Detailhandel","Transport","Turismetransport","Information","Finansielle tjenester","Ejendomstjenester","Professionelle tjenester","Koncernkontorer","Støttetjenester","Uddannelse","Sundhed","Fritid","Indkvartering","Andre tjenester","Regering"]
+            };
+
+            const dimNamesByLang = {
+                es: ["D1 Diversificación", "D2 Alto Valor", "D3 Manufactura", "D4 Comercio/Serv", "D5 Infraestructura", "D6 Dinamismo"],
+                za: ["D1 Diversificación", "D2 Guenda gule", "D3 Manufactura", "D4 Guxidxi/Serv", "D5 Infraestructura", "D6 Dinamismo"],
+                en: ["D1 Diversification", "D2 High value", "D3 Manufacturing", "D4 Trade/Services", "D5 Infrastructure", "D6 Dynamism"],
+                zh: ["D1 多元化", "D2 高价值", "D3 制造业", "D4 贸易/服务", "D5 基础设施", "D6 活力"],
+                fr: ["D1 Diversification", "D2 Haute valeur", "D3 Fabrication", "D4 Commerce/Services", "D5 Infrastructure", "D6 Dynamisme"],
+                de: ["D1 Diversifizierung", "D2 Hoher Wert", "D3 Fertigung", "D4 Handel/Dienste", "D5 Infrastruktur", "D6 Dynamik"],
+                ja: ["D1 多様化", "D2 高付加価値", "D3 製造業", "D4 商業/サービス", "D5 インフラ", "D6 ダイナミズム"],
+                da: ["D1 Diversificering", "D2 Høj værdi", "D3 Fremstilling", "D4 Handel/Tjenester", "D5 Infrastruktur", "D6 Dynamik"]
+            };
 
             const pesosACP = { D1: 0.0795, D2: 0.1654, D3: 0.1168, D4: 0.1713, D5: 0.1413, D6: 0.3257 };
-            const dimNames = ["D1 Diversificación", "D2 Alto Valor", "D3 Manufactura", "D4 Comercio/Serv",
-                "D5 Infraestructura", "D6 Dinamismo"
-            ];
             const dimKeys = ["D1", "D2", "D3", "D4", "D5", "D6"];
+            const t = key => (i18n[currentLang] && i18n[currentLang][key]) || i18n.es[key] || key;
+            const dimNames = () => dimNamesByLang[currentLang] || dimNamesByLang.es;
+            const sectorNames = () => sectorNamesByLang[currentLang] || sectorNamesByLang.es;
+            const nf = (digits = 0) => new Intl.NumberFormat(LANGS[currentLang]?.locale || 'es-MX', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+            const fmt = (v, digits = 0) => nf(digits).format(v);
+            const fmtPct = v => fmt(v, 1) + '%';
+            const fmtRank = r => '#' + fmt(r, 0);
+            const getCatKey = value => value >= 70 ? 'high' : value >= 50 ? 'mediumHigh' : value >= 30 ? 'mediumLow' : 'low';
+            const getStabilityKey = s => s.estab.includes('Muy estable') ? 'veryStable' : s.estab.includes('Estable') ? 'stable' : s.estab.includes('Moderado') ? 'moderate' : 'sensitive';
+            const getStabilityText = s => {
+                const icons = { veryStable:'🔒', stable:'✅', moderate:'⚠️', sensitive:'❌' };
+                const key = getStabilityKey(s);
+                return `${icons[key]} ${t(key)}`;
+            };
 
             function getScores(nombre) {
                 const d = ueData[nombre];
@@ -751,6 +888,42 @@
             const btnComparar = document.getElementById('btnComparar');
             const btnRanking = document.getElementById('btnRanking');
             const btnSensibilidad = document.getElementById('btnSensibilidad');
+
+            function aplicarIdioma() {
+                if (!LANGS[currentLang]) currentLang = 'es';
+                localStorage.setItem('iccemLang', currentLang);
+                document.documentElement.lang = currentLang === 'za' ? 'zai' : currentLang;
+                document.title = t('pageTitle');
+                document.getElementById('tituloHeader').innerHTML = `<span class="logo-icon">🏭</span> ${t('headerTitle')}`;
+                document.querySelector('.subtitle').textContent = t('subtitle');
+                document.querySelector('label[for="municipioSelect1"]').textContent = t('municipioA');
+                document.querySelector('label[for="municipioSelect2"]').textContent = t('municipioB');
+                btnDashboard.innerHTML = t('dashboard');
+                btnComparar.innerHTML = t('comparar');
+                btnRanking.innerHTML = t('ranking');
+                btnSensibilidad.innerHTML = t('sensibilidad');
+                document.querySelector('#cardKpi h3').innerHTML = `<span class="icon">📋</span>${t('resumen')} <span id="kpiMunicipioNombre"></span>`;
+                document.querySelector('#cardDimensiones h3').innerHTML = `<span class="icon">📐</span>${t('dimTitle')}`;
+                document.querySelector('#cardUE h3').innerHTML = `<span class="icon">🏪</span>${t('ueTitle')}`;
+                document.querySelector('#cardEscenarios h3').innerHTML = `<span class="icon">⚖️</span>${t('escTitle')}`;
+                document.querySelector('#cardComparacion h3').innerHTML = `<span class="icon">🔍</span>${t('compTitle')}`;
+                document.querySelector('#cardRanking h3').innerHTML = `<span class="icon">🏆</span>${t('rankingTitle')}`;
+                document.querySelector('#cardSensibilidad h3').innerHTML = `<span class="icon">📈</span>${t('sensTitle')}`;
+                const kpiLabels = [t('kpiICCEM'), t('kpiRank'), t('kpiCat'), t('kpiGrowth'), t('kpiUE'), t('kpiStability')];
+                document.querySelectorAll('#kpiContainer .label').forEach((el, i) => el.textContent = kpiLabels[i]);
+                document.querySelector('#cardUE .section-title').textContent = t('sectorBreakdown');
+                document.querySelector('#tablaEscenarios thead').innerHTML = `<tr><th>${t('scenario')}</th><th>ICCEM</th><th>${t('rank')}</th></tr>`;
+                document.querySelector('#tablaRanking thead').innerHTML = `<tr><th>#</th><th>${t('municipality')}</th><th>ICCEM</th><th>${t('cat')}</th><th>${t('growth')}</th></tr>`;
+                document.querySelector('#tablaSensibilidad thead').innerHTML = `<tr><th>${t('municipality')}</th><th>${t('range')}</th><th>${t('stability')}</th></tr>`;
+                document.querySelector('footer').innerHTML = `${t('footer')}<br><span style="font-weight: 600;">Dr. Antonio Salazar Campos</span><br><span style="font-weight: 600;">Universidad del Istmo</span>`;
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === currentLang));
+            }
+
+            function cambiarIdioma(lang) {
+                currentLang = lang;
+                aplicarIdioma();
+                actualizarVista();
+            }
             const cardComparacion = document.getElementById('cardComparacion');
 
             function init() {
@@ -768,6 +941,8 @@
                 btnComparar.addEventListener('click', () => setPanel('comparar'));
                 btnRanking.addEventListener('click', () => setPanel('ranking'));
                 btnSensibilidad.addEventListener('click', () => setPanel('sensibilidad'));
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => cambiarIdioma(btn.dataset.lang)));
+                aplicarIdioma();
                 municipioA = sel1.value;
                 municipioB = sel2.value;
                 setPanel('dashboard');
@@ -812,33 +987,33 @@
                 if (!sens || !ue || !scoresRaw) return;
                 const scoresNorm = normalizeScores(scoresRaw);
                 document.getElementById('kpiMunicipioNombre').textContent = '— ' + nombre;
-                document.getElementById('kpiIccm').textContent = sens.iccACP.toFixed(1);
-                document.getElementById('kpiRank').textContent = '#' + sens.rACP;
-                const cat = sens.iccACP >= 70 ? 'Alto' : sens.iccACP >= 50 ? 'Medio-Alto' : sens.iccACP >= 30 ? 'Medio-Bajo' :
-                    'Bajo';
+                document.getElementById('kpiIccm').textContent = fmt(sens.iccACP, 1);
+                document.getElementById('kpiRank').textContent = fmtRank(sens.rACP);
+                const catKey = getCatKey(sens.iccACP);
+                const cat = t(catKey);
                 document.getElementById('kpiCat').textContent = cat;
-                document.getElementById('kpiCrec').textContent = scoresRaw.tasa.toFixed(1) + '%';
-                document.getElementById('kpiUE2025').textContent = ue.u2025;
-                document.getElementById('kpiEstabilidad').textContent = sens.rango;
-                const badgeClass = cat === 'Alto' ? 'badge-alto' : cat === 'Medio-Alto' ? 'badge-medio-alto' : cat ===
-                    'Medio-Bajo' ? 'badge-medio-bajo' : 'badge-bajo';
-                const estabClass = sens.estab.includes('Muy estable') ? 'badge-muy-estable' : sens.estab.includes('Estable') ?
-                    'badge-estable' : sens.estab.includes('Moderado') ? 'badge-moderado' : 'badge-sensible';
+                document.getElementById('kpiCrec').textContent = fmtPct(scoresRaw.tasa);
+                document.getElementById('kpiUE2025').textContent = fmt(ue.u2025, 0);
+                document.getElementById('kpiEstabilidad').textContent = fmt(sens.rango, 0);
+                const badgeClass = catKey === 'high' ? 'badge-alto' : catKey === 'mediumHigh' ? 'badge-medio-alto' : catKey === 'mediumLow' ? 'badge-medio-bajo' : 'badge-bajo';
+                const stabilityKey = getStabilityKey(sens);
+                const estabClass = stabilityKey === 'veryStable' ? 'badge-muy-estable' : stabilityKey === 'stable' ? 'badge-estable' : stabilityKey === 'moderate' ? 'badge-moderado' : 'badge-sensible';
                 document.getElementById('badgeContainer').innerHTML =
-                    `<span class="badge ${badgeClass}">${cat}</span> <span class="badge ${estabClass}">${sens.estab}</span>`;
+                    `<span class="badge ${badgeClass}">${cat}</span> <span class="badge ${estabClass}">${getStabilityText(sens)}</span>`;
                 const dimBarsDiv = document.getElementById('dimBarsContainer');
                 dimBarsDiv.innerHTML = '';
+                const namesDim = dimNames();
                 const dimColors = ['#38bdf8', '#818cf8', '#f59e0b', '#10b981', '#f97316', '#ef4444'];
                 dimKeys.forEach((k, i) => {
                     const val = scoresNorm[k];
                     const peso = pesosACP[k];
                     dimBarsDiv.innerHTML += `
                 <div class="dim-row">
-                  <div class="dim-name">${dimNames[i]} (${(peso*100).toFixed(1)}%)</div>
+                  <div class="dim-name">${namesDim[i]} (${fmt(peso*100, 1)}%)</div>
                   <div class="dim-bar-wrap">
-                    <div class="dim-bar" style="width:${val}%;background:${dimColors[i]};">${val.toFixed(0)}</div>
+                    <div class="dim-bar" style="width:${val}%;background:${dimColors[i]};">${fmt(val,0)}</div>
                   </div>
-                  <div class="dim-val">${val.toFixed(0)}</div>
+                  <div class="dim-val">${fmt(val,0)}</div>
                 </div>`;
                 });
                 const ctx = document.getElementById('radarChart').getContext('2d');
@@ -846,7 +1021,7 @@
                 radarChartA = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                        labels: dimNames,
+                        labels: dimNames(),
                         datasets: [{ label: nombre, data: dimKeys.map(k => scoresNorm[k]),
                             backgroundColor: 'rgba(56,189,248,0.2)', borderColor: '#38bdf8', borderWidth: 2,
                             pointBackgroundColor: '#38bdf8', pointRadius: 4 }]
@@ -855,8 +1030,8 @@
                                 ticks: { display: false }, grid: { color: '#334155' }, pointLabels: { color: '#b0bec5',
                                     font: { size: 9 } } } }, plugins: { legend: { display: false } } }
                 });
-                document.getElementById('ue2020').textContent = ue.u2020;
-                document.getElementById('ue2025card').textContent = ue.u2025;
+                document.getElementById('ue2020').textContent = fmt(ue.u2020, 0);
+                document.getElementById('ue2025card').textContent = fmt(ue.u2025, 0);
                 const delta = ue.u2025 - ue.u2020;
                 const deltaColor = delta >= 0 ? '#10b981' : '#ef4444';
                 document.getElementById('deltaUE').innerHTML =
@@ -865,25 +1040,22 @@
                 sectorDiv.innerHTML = '';
                 ue.s2025.forEach((val, i) => {
                     if (val > 0) sectorDiv.innerHTML +=
-                        `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #1e293b;"><span>${sectorNames[i]}</span><span style="font-weight:600;margin-right:45px;">${val}</span></div>`;
+                        `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #1e293b;"><span>${sectorNames()[i]}</span><span style="font-weight:600;">${fmt(val,0)}</span></div>`;
                 });
                 const tbodyEsc = document.getElementById('tbodyEscenarios');
                 tbodyEsc.innerHTML = '';
-                const escenarios = [{ n: 'ACP Base (v3)', icc: sens.iccACP, r: sens.rACP }, { n: 'Pesos Iguales',
-                    icc: sens.iccIg, r: sens.rIg }, { n: 'Énf. Sofisticación', icc: sens.iccSof, r: sens.rSof },
-                { n: 'Énf. Manufactura', icc: sens.iccMan, r: sens.rMan }, { n: 'Énf. Dinamismo', icc: sens.iccDin,
-                    r: sens.rDin }, { n: 'Énf. Diversificación', icc: sens.iccDiv, r: sens.rDiv }];
+                const escenarios = [{ n: t('base'), icc: sens.iccACP, r: sens.rACP }, { n: t('equal'), icc: sens.iccIg, r: sens.rIg }, { n: t('sof'), icc: sens.iccSof, r: sens.rSof }, { n: t('man'), icc: sens.iccMan, r: sens.rMan }, { n: t('dyn'), icc: sens.iccDin, r: sens.rDin }, { n: t('div'), icc: sens.iccDiv, r: sens.rDiv }];
                 escenarios.forEach(e => {
                     const tr = document.createElement('tr');
-                    if (e.n.includes('ACP')) tr.classList.add('highlight-row');
-                    tr.innerHTML = `<td>${e.n}</td><td style="font-weight:700;">${e.icc.toFixed(2)}</td><td>#${e.r}</td>`;
+                    if (e.n.includes('ACP') || e.n.includes('PCA')) tr.classList.add('highlight-row');
+                    tr.innerHTML = `<td>${e.n}</td><td style="font-weight:700;">${fmt(e.icc,2)}</td><td>${fmtRank(e.r)}</td>`;
                     tbodyEsc.appendChild(tr);
                 });
             }
 
             function actualizarComparacion(nA, nB) {
                 if (!nA || !nB || nA === nB) { cardComparacion.innerHTML =
-                        '<p style="color:#94a3b8;">Selecciona dos municipios diferentes para comparar.</p>'; return; }
+                        `<p style="color:#94a3b8;">${t('selectTwo')}</p>`; return; }
                 const sA = sensMap[nA],
                     sB = sensMap[nB];
                 const scA = getScores(nA),
@@ -894,16 +1066,16 @@
                 const compDiv = document.getElementById('comparacionContent');
                 compDiv.innerHTML = `
               <div class="comparison-grid">
-                <div><strong>${nA}</strong><br>ICCEM: ${sA.iccACP.toFixed(1)} (Rank #${sA.rACP})</div>
-                <div><strong>${nB}</strong><br>ICCEM: ${sB.iccACP.toFixed(1)} (Rank #${sB.rACP})</div>
+                <div><strong>${nA}</strong><br>ICCEM: ${fmt(sA.iccACP,1)} (${t('rank')} ${fmtRank(sA.rACP)})</div>
+                <div><strong>${nB}</strong><br>ICCEM: ${fmt(sB.iccACP,1)} (${t('rank')} ${fmtRank(sB.rACP)})</div>
               </div>
               <table class="scenario-table" style="margin-top:0.5rem;">
-                <thead><tr><th>Dimensión</th><th>${nA}</th><th>${nB}</th><th>Dif.</th></tr></thead>
+                <thead><tr><th>${t('dimension')}</th><th>${nA}</th><th>${nB}</th><th>${t('diff')}</th></tr></thead>
                 <tbody>${dimKeys.map((k,i)=>{
                   const diff = normA[k] - normB[k];
                   const cls = diff > 1 ? 'diff-positive' : diff < -1 ? 'diff-negative' : 'diff-neutral';
                   const sign = diff > 0 ? '+' : '';
-                  return `<tr><td>${dimNames[i]}</td><td>${normA[k].toFixed(0)}</td><td>${normB[k].toFixed(0)}</td><td class="${cls}">${sign}${diff.toFixed(1)}</td></tr>`;
+                  return `<tr><td>${dimNames()[i]}</td><td>${fmt(normA[k],0)}</td><td>${fmt(normB[k],0)}</td><td class="${cls}">${sign}${fmt(diff,1)}</td></tr>`;
                 }).join('')}</tbody>
               </table>
             `;
@@ -912,7 +1084,7 @@
                 radarComparacionChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                        labels: dimNames,
+                        labels: dimNames(),
                         datasets: [
                             { label: nA, data: dimKeys.map(k => normA[k]), backgroundColor: 'rgba(56,189,248,0.15)',
                                 borderColor: '#38bdf8', borderWidth: 2, pointRadius: 3 },
@@ -934,12 +1106,11 @@
                 rankingOrdenado.forEach((s, i) => {
                     const ue = ueData[s.m];
                     const tasa = ue && ue.u2020 > 0 ? ((ue.u2025 - ue.u2020) / ue.u2020 * 100) : 0;
-                    const cat = s.iccACP >= 70 ? 'Alto' : s.iccACP >= 50 ? 'Medio-Alto' : s.iccACP >= 30 ? 'Medio-Bajo' :
-                        'Bajo';
+                    const cat = t(getCatKey(s.iccACP));
                     const tr = document.createElement('tr');
                     if (s.m === municipioA) tr.classList.add('highlight-row');
                     tr.innerHTML =
-                        `<td>${i+1}</td><td>${s.m}</td><td style="font-weight:700;">${s.iccACP.toFixed(1)}</td><td>${cat}</td><td>${tasa.toFixed(1)}%</td>`;
+                        `<td>${fmt(i+1,0)}</td><td>${s.m}</td><td style="font-weight:700;">${fmt(s.iccACP,1)}</td><td>${cat}</td><td>${fmtPct(tasa)}</td>`;
                     tr.style.cursor = 'pointer';
                     tr.addEventListener('click', () => { sel1.value = s.m;
                         municipioA = s.m;
@@ -958,7 +1129,7 @@
                     let dotClass = s.rango > 5 ? 'dot-red' : s.rango >= 3 ? 'dot-orange' : s.rango >= 1 ? 'dot-yellow' :
                         'dot-green';
                     tr.innerHTML =
-                        `<td>${s.m}</td><td><span class="stability-dot ${dotClass}"></span>${s.rango}</td><td>${s.estab}</td>`;
+                        `<td>${s.m}</td><td><span class="stability-dot ${dotClass}"></span>${fmt(s.rango,0)}</td><td>${getStabilityText(s)}</td>`;
                     tr.style.cursor = 'pointer';
                     tr.addEventListener('click', () => { sel1.value = s.m;
                         municipioA = s.m;
